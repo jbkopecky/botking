@@ -1,7 +1,21 @@
 import re
 from robobrowser import RoboBrowser
 from requests_toolbelt import SSLAdapter
+from collections import defaultdict
 import config
+
+
+def max_radio_map(brow):
+    radio_map = defaultdict(list)
+    for k in brow.find_all('input'):
+
+        in_name = k.get('name', None)
+        in_type = k.get('type', None)
+
+        if in_type == 'radio' and in_name:
+            radio_map[k['name']].append(k['value'])
+
+    return radio_map
 
 
 # Browse url :
@@ -32,6 +46,10 @@ form.serialize()
 browser.submit_form(form)
 
 # Let's fill in the proper questionnaire !
+import ipdb; ipdb.set_trace() # BREAKPOINT
+inputs_map = max_radio_map(browser)
+
+import ipdb; ipdb.set_trace() # BREAKPOINT
 
 for i in form.keys():
     if form[i] == '':

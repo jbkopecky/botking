@@ -1,3 +1,9 @@
+# Website URL
+url = 'https://www.bkvousecoute.fr'
+
+# Restaurant ID
+ID = '20771' # Boetie restaurant
+
 # Input here date and time:
 date = ['02','15']
 time = ['12','30']
@@ -14,6 +20,4 @@ headers = {
         "User-Agent" : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36'
         }
 
-url = 'https://www.bkvousecoute.fr'
 
-ID = '20771' # Boetie restaurant
