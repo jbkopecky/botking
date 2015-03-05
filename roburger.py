@@ -1,8 +1,9 @@
-import re
 from robobrowser import RoboBrowser
 from requests_toolbelt import SSLAdapter
 from collections import defaultdict
+import random
 import config
+import time
 
 
 def max_radio_map(brow):
@@ -46,11 +47,14 @@ form.serialize()
 browser.submit_form(form)
 
 # Let's fill in the proper questionnaire !
-import ipdb; ipdb.set_trace() # BREAKPOINT
-inputs_map = max_radio_map(browser)
 
-import ipdb; ipdb.set_trace() # BREAKPOINT
-
-for i in form.keys():
-    if form[i] == '':
-        form[i].value = ''
+while not browser.find('p', {'class': 'ValCode'}):
+    inputs_map = max_radio_map(browser)
+    f = browser.get_forms()[0]
+    for i in f.keys():
+        if f[i].value == '':
+            answers_list = inputs_map.get(i, ['1'])
+            f[i].value = random.choice(answers_list)
+    f.serialize()
+    browser.submit_form(f)
+    import ipdb; ipdb.set_trace() # BREAKPOINT
