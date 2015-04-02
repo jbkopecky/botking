@@ -5,5 +5,5 @@ a blink.
 # python modules requirements
 1. robobrowser (0.5.1)
 2. requests (2.5.3)
-3. requests-toolbela (0.3.1)
+3. requests-toolbelt (0.3.1)
 4. urllib3 (1.10.1)
