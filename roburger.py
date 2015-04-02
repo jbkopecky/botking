@@ -57,4 +57,5 @@ while not browser.find('p', {'class': 'ValCode'}):
             f[i].value = random.choice(answers_list)
     f.serialize()
     browser.submit_form(f)
-    import ipdb; ipdb.set_trace() # BREAKPOINT
+
+print browser.find('p', {'class': 'ValCode'}).text
