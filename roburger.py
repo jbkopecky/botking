@@ -1,10 +1,13 @@
-from robobrowser import RoboBrowser
-from requests_toolbelt import SSLAdapter
 from collections import defaultdict
 import random
-import config
 import time
+import ssl
 
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+from robobrowser import RoboBrowser
+
+import config
 
 def max_radio_map(brow):
     radio_map = defaultdict(list)
@@ -18,16 +21,24 @@ def max_radio_map(brow):
 
     return radio_map
 
+# Custom SSL Adapter, see:
+# https://lukasa.co.uk/2013/01/Choosing_SSL_Version_In_Requests/   
+class MyAdapter(HTTPAdapter):
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = PoolManager( num_pools=connections,
+                                        maxsize=maxsize,
+                                        block=block,
+                                        ssl_version=ssl.PROTOCOL_TLSv1)
 
 # Browse url :
-browser = RoboBrowser()
+browser = RoboBrowser(parser="lxml")
 browser.session.headers = config.headers
 
-# Hacky: Force SSLv3 -- Must get adequates libs
-adapter = SSLAdapter('SSLv3')
-browser.session.mount('https://', adapter)
+# Mount with custom SSL Adapter
+browser.session.mount('https://', MyAdapter())
 
 # Get to website
+print "- Connecting to url ..."
 browser.open(config.url)
 
 # Click on first button to go to second page:
@@ -46,8 +57,8 @@ form['InputMinute'].value = config.time[1]
 form.serialize()
 browser.submit_form(form)
 
+print "- Filling Forms Randomly ..."
 # Let's fill in the proper questionnaire !
-
 while not browser.find('p', {'class': 'ValCode'}):
     inputs_map = max_radio_map(browser)
     f = browser.get_forms()[0]
@@ -58,4 +69,5 @@ while not browser.find('p', {'class': 'ValCode'}):
     f.serialize()
     browser.submit_form(f)
 
-print browser.find('p', {'class': 'ValCode'}).text
+print "- " + browser.find('p', {'class': 'ValCode'}).text
+print "- Bon appetit !"
