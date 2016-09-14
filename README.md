@@ -1,4 +1,4 @@
-# botking
+# botking :hamburger: :crown:
 
 ## Description
 
